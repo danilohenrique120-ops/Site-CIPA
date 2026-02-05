@@ -1,109 +1,353 @@
-
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Jornal Digital CIPA 2026 - Corteva</title>
-    <script src="https://cdn.tailwindcss.com"></script>
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <title>Jornal da CIPA - SIPATMA 2026</title>
+    
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+
     <style>
+        /* --- ESTILO VISUAL COMPLETO --- */
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        :root {
+            --verde-cipa: #2E7D32;
+            --roxo-profundo: #4B0082;
+            --branco: #ffffff;
+            --vidro: rgba(255, 255, 255, 0.15);
+        }
+
         body {
-            font-family: 'Inter', sans-serif;
-            margin: 0;
-            padding: 0;
-            overflow-x: hidden;
-            background: linear-gradient(135deg, #4B0082 0%, #2E7D32 100%);
-            background-attachment: fixed;
+            font-family: 'Poppins', sans-serif;
+            color: var(--branco);
+            background: linear-gradient(135deg, var(--roxo-profundo) 0%, var(--verde-cipa) 100%);
             min-height: 100vh;
-            color: #F5F5F5;
+            background-attachment: fixed;
+            overflow-x: hidden;
+            display: flex;
+            justify-content: center; /* Centraliza no PC */
         }
 
-        .glass-card {
-            background: rgba(255, 255, 255, 0.1);
-            backdrop-filter: blur(20px);
-            -webkit-backdrop-filter: blur(20px);
-            border: 1px solid rgba(255, 255, 255, 0.15);
-            box-shadow: 0 12px 40px 0 rgba(0, 0, 0, 0.3);
+        /* TRAVA DE DESIGN (Para não quebrar no PC) */
+        .app-container {
+            width: 100%;
+            max-width: 480px; /* Tamanho de celular */
+            background: rgba(0, 0, 0, 0.2);
+            min-height: 100vh;
+            padding: 20px;
+            padding-bottom: 80px;
+            position: relative;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        /* Ocultação forçada de controles admin para usuários comuns */
-        .admin-control {
-            display: none !important;
+        /* CARD VIDRO */
+        .card {
+            background: var(--vidro);
+            backdrop-filter: blur(12px);
+            -webkit-backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            border-radius: 20px;
+            padding: 20px;
+            margin-bottom: 25px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+            position: relative;
         }
 
-        /* Exibição apenas quando logado */
-        body.is-admin .admin-control {
-            display: flex !important;
-        }
+        h2 { font-size: 1.8rem; text-align: center; margin-bottom: 5px; }
+        h3 { font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
+        p { text-align: center; font-size: 0.9rem; opacity: 0.9; }
 
-        /* Garante que imagens do ImgBB nunca quebrem o design */
-        img {
+        /* CARROSSEL */
+        .carousel-container {
+            width: 100%;
+            height: 220px;
+            border-radius: 15px;
+            overflow: hidden;
+            background: rgba(0,0,0,0.3);
+            position: relative;
+        }
+        .carousel-slide {
+            width: 100%;
+            height: 100%;
             object-fit: cover;
+            display: block;
         }
 
-        .custom-scrollbar::-webkit-scrollbar {
-            width: 8px;
+        /* PASSAPORTE */
+        .puzzle-wrapper { display: flex; justify-content: center; }
+        .puzzle-container {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            grid-template-rows: 1fr 1fr;
+            width: 280px;
+            height: 280px;
+            gap: 4px;
+            background: rgba(255, 255, 255, 0.1);
+            padding: 5px;
+            border-radius: 15px;
+            position: relative;
         }
-        .custom-scrollbar::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.05);
+        .puzzle-piece {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            background: #333;
+            overflow: hidden;
         }
-        .custom-scrollbar::-webkit-scrollbar-thumb {
-            background: rgba(253, 216, 53, 0.3);
-            border-radius: 10px;
+        .puzzle-piece:nth-child(1) { border-top-left-radius: 10px; }
+        .puzzle-piece:nth-child(2) { border-top-right-radius: 10px; }
+        .puzzle-piece:nth-child(3) { border-bottom-left-radius: 10px; }
+        .puzzle-piece:nth-child(4) { border-bottom-right-radius: 10px; }
+        .puzzle-img { width: 100%; height: 100%; object-fit: cover; }
+
+        /* GRID DE MESES */
+        .meses-grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 10px;
+        }
+        .mes-btn {
+            aspect-ratio: 1 / 1;
+            position: relative;
+            border-radius: 12px;
+            overflow: hidden;
+            border: 1px solid rgba(255,255,255,0.2);
+            background: rgba(0,0,0,0.3);
+        }
+        .mes-btn img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0.8;
+            transition: 0.3s;
+        }
+        .mes-label {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            width: 100%;
+            background: rgba(0,0,0,0.6);
+            text-align: center;
+            font-size: 0.75rem;
+            padding: 4px 0;
+            font-weight: bold;
         }
 
-        @keyframes pulse-gold {
-            0%, 100% {
-                transform: scale(1);
-                box-shadow: 0 0 0 0 rgba(253, 216, 53, 0.4);
-            }
-            50% {
-                transform: scale(1.05);
-                box-shadow: 0 0 30px 15px rgba(253, 216, 53, 0);
-            }
+        /* ADMIN */
+        footer { margin-top: 30px; text-align: center; opacity: 0.6; font-size: 0.8rem; }
+        #btn-login {
+            background: transparent;
+            border: 1px solid white;
+            color: white;
+            padding: 4px 12px;
+            border-radius: 20px;
+            margin-top: 10px;
+            cursor: pointer;
         }
-        .animate-pulse-gold {
-            animation: pulse-gold 2.5s cubic-bezier(0.4, 0, 0.6, 1) infinite;
+        .btn-edit {
+            position: absolute;
+            z-index: 999;
+            top: 5px;
+            right: 5px;
+            width: 35px;
+            height: 35px;
+            border-radius: 50%;
+            background: #FFD700;
+            color: black;
+            border: 2px solid white;
+            font-weight: bold;
+            font-size: 1.2rem;
+            cursor: pointer;
+            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
-
-        .puzzle-tl { clip-path: url(#clip-tl); }
-        .puzzle-tr { clip-path: url(#clip-tr); }
-        .puzzle-bl { clip-path: url(#clip-bl); }
-        .puzzle-br { clip-path: url(#clip-br); }
     </style>
-<script type="importmap">
-{
-  "imports": {
-    "react": "https://esm.sh/react@^19.2.4",
-    "react-dom/": "https://esm.sh/react-dom@^19.2.4/",
-    "react/": "https://esm.sh/react@^19.2.4/",
-    "lucide-react": "https://esm.sh/lucide-react@^0.563.0"
-  }
-}
-</script>
-<link rel="stylesheet" href="/index.css">
 </head>
-<body class="min-h-screen text-[#F5F5F5]">
-    <svg width="0" height="0" style="position:absolute">
-      <defs>
-        <clipPath id="clip-tl" clipPathUnits="objectBoundingBox">
-          <path d="M0,0 H1 C1,0.4 1.1,0.4 1.1,0.5 C1.1,0.6 1,0.6 1,1 C0.6,1 0.6,1.1 0.5,1.1 C0.4,1.1 0.4,1 0,1 Z" />
-        </clipPath>
-        <clipPath id="clip-tr" clipPathUnits="objectBoundingBox">
-          <path d="M0,0 H1 V1 C0.6,1 0.6,1.1 0.5,1.1 C0.4,1.1 0.4,1 0,1 C0,0.6 0.1,0.6 0.1,0.5 C0.1,0.4 0,0.4 0,0 Z" />
-        </clipPath>
-        <clipPath id="clip-bl" clipPathUnits="objectBoundingBox">
-          <path d="M0,0.1 C0.3,0.1 0.3,0 0.4,0 C0.5,0 0.5,0.1 0.8,0.1 H1 C1,0.4 1.1,0.4 1.1,0.5 C1.1,0.6 1,0.6 1,1 H0 V0 Z" />
-        </clipPath>
-        <clipPath id="clip-br" clipPathUnits="objectBoundingBox">
-          <path d="M0,0.1 C0.3,0.1 0.3,0 0.4,0 C0.5,0 0.5,0.1 0.8,0.1 H1 V1 H0 C0,0.6 0.1,0.6 0.1,0.5 C0.1,0.4 0,0.4 0,0.1 Z" />
-        </clipPath>
-      </defs>
-    </svg>
-    <div id="root"></div>
-<script type="module" src="/index.tsx"></script>
+<body>
+
+    <div class="app-container">
+        <header style="text-align: center; margin-bottom: 20px;">
+            <div style="font-size: 2.5rem;">🧩</div>
+            <h2>SIPATMA 2026</h2>
+            <p style="color: #A5D6A7;">Corteva Agriscience</p>
+        </header>
+
+        <div class="card" id="card-carousel">
+            <h3>Destaques</h3>
+            <div class="carousel-container" id="main-carousel">
+                <img src="https://placehold.co/600x400/2E7D32/FFF?text=SIPATMA+2026" class="carousel-slide" id="img-carousel-1">
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Meu Passaporte</h3>
+            <p style="margin-bottom: 15px;">Colete as 4 peças para o sorteio!</p>
+            <div class="puzzle-wrapper">
+                <div class="puzzle-container">
+                    <div class="puzzle-piece" id="peca-container-1">
+                        <img id="img-peca-1" class="puzzle-img" src="https://placehold.co/150x150/d32f2f/FFF?text=1">
+                    </div>
+                    <div class="puzzle-piece" id="peca-container-2">
+                        <img id="img-peca-2" class="puzzle-img" src="https://placehold.co/150x150/fbc02d/000?text=2">
+                    </div>
+                    <div class="puzzle-piece" id="peca-container-3">
+                        <img id="img-peca-3" class="puzzle-img" src="https://placehold.co/150x150/1976d2/FFF?text=3">
+                    </div>
+                    <div class="puzzle-piece" id="peca-container-4">
+                        <img id="img-peca-4" class="puzzle-img" src="https://placehold.co/150x150/388e3c/FFF?text=4">
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <h3>Campanhas</h3>
+            <div class="meses-grid">
+                <div class="mes-btn" id="mes-container-jan">
+                    <img id="img-mes-jan" src="https://placehold.co/100x100/555/FFF?text=Jan">
+                    <div class="mes-label">JAN</div>
+                </div>
+                <div class="mes-btn" id="mes-container-fev">
+                    <img id="img-mes-fev" src="https://placehold.co/100x100/555/FFF?text=Fev">
+                    <div class="mes-label">FEV</div>
+                </div>
+                <div class="mes-btn" id="mes-container-mar">
+                    <img id="img-mes-mar" src="https://placehold.co/100x100/555/FFF?text=Mar">
+                    <div class="mes-label">MAR</div>
+                </div>
+                <div class="mes-btn" id="mes-container-abr">
+                    <img id="img-mes-abr" src="https://placehold.co/100x100/555/FFF?text=Abr">
+                    <div class="mes-label">ABR</div>
+                </div>
+                <div class="mes-btn" id="mes-container-mai">
+                    <img id="img-mes-mai" src="https://placehold.co/100x100/555/FFF?text=Mai">
+                    <div class="mes-label">MAI</div>
+                </div>
+                 <div class="mes-btn" id="mes-container-jun">
+                    <img id="img-mes-jun" src="https://placehold.co/100x100/555/FFF?text=Jun">
+                    <div class="mes-label">JUN</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <footer>
+        <p>SIPATMA 2026 - Corteva</p>
+        <button id="btn-login">🔒 Área Admin</button>
+    </footer>
+
+    <script type="module">
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
+        import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
+        import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
+
+        // CHAVES DO DANILO (Configuração Pronta)
+        const firebaseConfig = {
+            apiKey: "AIzaSyB03IGZPXGwgmgKp9MOMRWCFxJqm-hkbzc",
+            authDomain: "sipatma-2026.firebaseapp.com",
+            projectId: "sipatma-2026",
+            storageBucket: "sipatma-2026.firebasestorage.app",
+            messagingSenderId: "779461369390",
+            appId: "1:779461369390:web:7a87a88a40d69461d809bf",
+            measurementId: "G-V8ZG0W698F"
+        };
+
+        const app = initializeApp(firebaseConfig);
+        const auth = getAuth(app);
+        const db = getFirestore(app);
+
+        // --- SISTEMA DE LOGIN E EDIÇÃO ---
+        const btnLogin = document.getElementById('btn-login');
+        
+        // 1. Botão Login
+        btnLogin.addEventListener('click', () => {
+            const email = prompt("📧 Email do Admin:");
+            const senha = prompt("🔑 Senha:");
+            if(email && senha) {
+                signInWithEmailAndPassword(auth, email, senha)
+                .then(() => alert("✅ Login com Sucesso! Toque nos lápis amarelos para editar."))
+                .catch((error) => alert("Erro: " + error.message));
+            }
+        });
+
+        // 2. Se logado, mostra lápis
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                btnLogin.innerText = "🔓 Logado";
+                ativarAdmin();
+            }
+        });
+
+        function ativarAdmin() {
+            // Cria botões onde for necessário
+            criarBotao('main-carousel', 'carousel_main');
+            
+            // Puzzle
+            criarBotao('peca-container-1', 'peca_1');
+            criarBotao('peca-container-2', 'peca_2');
+            criarBotao('peca-container-3', 'peca_3');
+            criarBotao('peca-container-4', 'peca_4');
+
+            // Meses
+            criarBotao('mes-container-jan', 'mes_jan');
+            criarBotao('mes-container-fev', 'mes_fev');
+            criarBotao('mes-container-mar', 'mes_mar');
+            criarBotao('mes-container-abr', 'mes_abr');
+            criarBotao('mes-container-mai', 'mes_mai');
+            criarBotao('mes-container-jun', 'mes_jun');
+        }
+
+        function criarBotao(parentId, dbField) {
+            const parent = document.getElementById(parentId);
+            if(!parent) return;
+            if(parent.querySelector('.btn-edit')) return; // Já existe
+
+            const btn = document.createElement('button');
+            btn.className = 'btn-edit';
+            btn.innerHTML = '✎';
+            
+            btn.onclick = (e) => {
+                e.stopPropagation();
+                const link = prompt("Cole o Link Direto da Imagem (ImgBB/Sharepoint):");
+                if(link) salvar(dbField, link);
+            };
+            parent.appendChild(btn);
+        }
+
+        // 3. Salvar no Banco
+        async function salvar(campo, valor) {
+            try {
+                const ref = doc(db, "site_content", "dados_gerais");
+                await setDoc(ref, { [campo]: valor }, { merge: true });
+                alert("Imagem Atualizada! 🚀");
+            } catch (e) {
+                alert("Erro ao salvar: " + e.message);
+            }
+        }
+
+        // 4. Carregar Dados (Tempo Real)
+        const ref = doc(db, "site_content", "dados_gerais");
+        onSnapshot(ref, (snap) => {
+            if (snap.exists()) {
+                const d = snap.data();
+                if(d.carousel_main) document.getElementById('img-carousel-1').src = d.carousel_main;
+                
+                if(d.peca_1) document.getElementById('img-peca-1').src = d.peca_1;
+                if(d.peca_2) document.getElementById('img-peca-2').src = d.peca_2;
+                if(d.peca_3) document.getElementById('img-peca-3').src = d.peca_3;
+                if(d.peca_4) document.getElementById('img-peca-4').src = d.peca_4;
+
+                if(d.mes_jan) document.getElementById('img-mes-jan').src = d.mes_jan;
+                if(d.mes_fev) document.getElementById('img-mes-fev').src = d.mes_fev;
+                if(d.mes_mar) document.getElementById('img-mes-mar').src = d.mes_mar;
+                if(d.mes_abr) document.getElementById('img-mes-abr').src = d.mes_abr;
+                if(d.mes_mai) document.getElementById('img-mes-mai').src = d.mes_mai;
+                if(d.mes_jun) document.getElementById('img-mes-jun').src = d.mes_jun;
+            }
+        });
+    </script>
 </body>
 </html>
