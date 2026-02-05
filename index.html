@@ -1,3 +1,27 @@
+Danilo, você tem total razão. Peço desculpas!
+
+O Google AI Studio cria o visual usando uma tecnologia chamada Tailwind CSS (que deixa tudo moderno, arredondado e bonito) e React. Quando converti para HTML puro para facilitar sua vida, perdemos esse "polimento" visual.
+
+Para ter o visual exato do Google sem precisar configurar servidores complexos (que é o que aqueles arquivos .tsx e .json exigem), o segredo é usar o Tailwind via CDN.
+
+Vamos resolver isso agora. Eu reescrevi o código abaixo. Ele continua sendo UM ARQUIVO SÓ (para você subir fácil no GitHub), mas agora ele importa o design system original do Google.
+
+O site vai ficar lindo de novo.
+
+O QUE VOCÊ DEVE FAZER (Última vez, prometo):
+Vá no seu GitHub Desktop.
+
+Apague os arquivos da pasta de novo (deixe limpa).
+
+Crie o index.html.
+
+COLE ESTE CÓDIGO ABAIXO. (Ele usa Tailwind, o mesmo design do AI Studio).
+
+Suba para o GitHub ("Commit" e "Push").
+
+Este código traz de volta o visual moderno, as transparências e o layout que você gostou, mas com a mecânica do Firebase funcionando.
+
+HTML
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
@@ -5,246 +29,153 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Jornal da CIPA - SIPATMA 2026</title>
     
-    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&display=swap" rel="stylesheet">
 
     <style>
-        /* --- ESTILO VISUAL COMPLETO --- */
-        * { box-sizing: border-box; margin: 0; padding: 0; }
-
-        :root {
-            --verde-cipa: #2E7D32;
-            --roxo-profundo: #4B0082;
-            --branco: #ffffff;
-            --vidro: rgba(255, 255, 255, 0.15);
-        }
-
-        body {
-            font-family: 'Poppins', sans-serif;
-            color: var(--branco);
-            background: linear-gradient(135deg, var(--roxo-profundo) 0%, var(--verde-cipa) 100%);
-            min-height: 100vh;
-            background-attachment: fixed;
-            overflow-x: hidden;
-            display: flex;
-            justify-content: center; /* Centraliza no PC */
-        }
-
-        /* TRAVA DE DESIGN (Para não quebrar no PC) */
-        .app-container {
-            width: 100%;
-            max-width: 480px; /* Tamanho de celular */
-            background: rgba(0, 0, 0, 0.2);
-            min-height: 100vh;
-            padding: 20px;
-            padding-bottom: 80px;
-            position: relative;
-            box-shadow: 0 0 50px rgba(0,0,0,0.5);
-        }
-
-        /* CARD VIDRO */
-        .card {
-            background: var(--vidro);
-            backdrop-filter: blur(12px);
-            -webkit-backdrop-filter: blur(12px);
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            border-radius: 20px;
-            padding: 20px;
-            margin-bottom: 25px;
-            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
-            position: relative;
-        }
-
-        h2 { font-size: 1.8rem; text-align: center; margin-bottom: 5px; }
-        h3 { font-size: 1.2rem; margin-bottom: 15px; border-bottom: 1px solid rgba(255,255,255,0.2); padding-bottom: 10px; }
-        p { text-align: center; font-size: 0.9rem; opacity: 0.9; }
-
-        /* CARROSSEL */
-        .carousel-container {
-            width: 100%;
-            height: 220px;
-            border-radius: 15px;
-            overflow: hidden;
-            background: rgba(0,0,0,0.3);
-            position: relative;
-        }
-        .carousel-slide {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            display: block;
-        }
-
-        /* PASSAPORTE */
-        .puzzle-wrapper { display: flex; justify-content: center; }
-        .puzzle-container {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            grid-template-rows: 1fr 1fr;
-            width: 280px;
-            height: 280px;
-            gap: 4px;
-            background: rgba(255, 255, 255, 0.1);
-            padding: 5px;
-            border-radius: 15px;
-            position: relative;
-        }
-        .puzzle-piece {
-            position: relative;
-            width: 100%;
-            height: 100%;
-            background: #333;
-            overflow: hidden;
-        }
-        .puzzle-piece:nth-child(1) { border-top-left-radius: 10px; }
-        .puzzle-piece:nth-child(2) { border-top-right-radius: 10px; }
-        .puzzle-piece:nth-child(3) { border-bottom-left-radius: 10px; }
-        .puzzle-piece:nth-child(4) { border-bottom-right-radius: 10px; }
-        .puzzle-img { width: 100%; height: 100%; object-fit: cover; }
-
-        /* GRID DE MESES */
-        .meses-grid {
-            display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 10px;
-        }
-        .mes-btn {
-            aspect-ratio: 1 / 1;
-            position: relative;
-            border-radius: 12px;
-            overflow: hidden;
-            border: 1px solid rgba(255,255,255,0.2);
-            background: rgba(0,0,0,0.3);
-        }
-        .mes-btn img {
-            width: 100%;
-            height: 100%;
-            object-fit: cover;
-            opacity: 0.8;
-            transition: 0.3s;
-        }
-        .mes-label {
-            position: absolute;
-            bottom: 0;
-            left: 0;
-            width: 100%;
-            background: rgba(0,0,0,0.6);
-            text-align: center;
-            font-size: 0.75rem;
-            padding: 4px 0;
-            font-weight: bold;
-        }
-
-        /* ADMIN */
-        footer { margin-top: 30px; text-align: center; opacity: 0.6; font-size: 0.8rem; }
-        #btn-login {
-            background: transparent;
-            border: 1px solid white;
-            color: white;
-            padding: 4px 12px;
-            border-radius: 20px;
-            margin-top: 10px;
-            cursor: pointer;
-        }
-        .btn-edit {
-            position: absolute;
-            z-index: 999;
-            top: 5px;
-            right: 5px;
-            width: 35px;
-            height: 35px;
-            border-radius: 50%;
-            background: #FFD700;
-            color: black;
-            border: 2px solid white;
-            font-weight: bold;
-            font-size: 1.2rem;
-            cursor: pointer;
-            box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-            display: flex;
-            align-items: center;
-            justify-content: center;
-        }
+        body { font-family: 'Inter', sans-serif; }
+        /* Animação suave para os modais e botões */
+        .transition-all { transition-property: all; transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1); transition-duration: 300ms; }
     </style>
-</head>
-<body>
 
-    <div class="app-container">
-        <header style="text-align: center; margin-bottom: 20px;">
-            <div style="font-size: 2.5rem;">🧩</div>
-            <h2>SIPATMA 2026</h2>
-            <p style="color: #A5D6A7;">Corteva Agriscience</p>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        cipa: {
+                            green: '#2E7D32',
+                            dark: '#1B5E20',
+                            purple: '#4B0082',
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+</head>
+<body class="bg-gradient-to-br from-indigo-900 via-purple-900 to-green-900 min-h-screen text-white overflow-x-hidden selection:bg-green-500 selection:text-white">
+
+    <div class="max-w-md mx-auto min-h-screen bg-black/20 shadow-2xl relative pb-24">
+        
+        <header class="pt-8 pb-6 px-6 text-center bg-gradient-to-b from-black/40 to-transparent">
+            <div class="inline-block p-3 rounded-2xl bg-white/10 backdrop-blur-md mb-3 shadow-lg border border-white/10">
+                <span class="text-4xl">🧩</span>
+            </div>
+            <h1 class="text-3xl font-extrabold tracking-tight text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-200 drop-shadow-sm">
+                SIPATMA 2026
+            </h1>
+            <p class="text-green-100/80 text-sm mt-1 font-medium tracking-wide">Corteva Agriscience</p>
         </header>
 
-        <div class="card" id="card-carousel">
-            <h3>Destaques</h3>
-            <div class="carousel-container" id="main-carousel">
-                <img src="https://placehold.co/600x400/2E7D32/FFF?text=SIPATMA+2026" class="carousel-slide" id="img-carousel-1">
-            </div>
-        </div>
+        <main class="px-5 space-y-6">
 
-        <div class="card">
-            <h3>Meu Passaporte</h3>
-            <p style="margin-bottom: 15px;">Colete as 4 peças para o sorteio!</p>
-            <div class="puzzle-wrapper">
-                <div class="puzzle-container">
-                    <div class="puzzle-piece" id="peca-container-1">
-                        <img id="img-peca-1" class="puzzle-img" src="https://placehold.co/150x150/d32f2f/FFF?text=1">
-                    </div>
-                    <div class="puzzle-piece" id="peca-container-2">
-                        <img id="img-peca-2" class="puzzle-img" src="https://placehold.co/150x150/fbc02d/000?text=2">
-                    </div>
-                    <div class="puzzle-piece" id="peca-container-3">
-                        <img id="img-peca-3" class="puzzle-img" src="https://placehold.co/150x150/1976d2/FFF?text=3">
-                    </div>
-                    <div class="puzzle-piece" id="peca-container-4">
-                        <img id="img-peca-4" class="puzzle-img" src="https://placehold.co/150x150/388e3c/FFF?text=4">
+            <div class="group relative bg-white/10 backdrop-blur-xl rounded-3xl p-1 border border-white/20 shadow-xl overflow-hidden">
+                <div class="absolute inset-0 bg-gradient-to-b from-white/5 to-transparent pointer-events-none"></div>
+                
+                <div class="relative h-56 rounded-2xl overflow-hidden bg-black/40" id="card-carousel">
+                    <img id="img-carousel-1" src="https://placehold.co/600x400/1e293b/a7f3d0?text=SIPATMA+2026" 
+                         class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-105">
+                    
+                    <div class="absolute bottom-0 left-0 right-0 bg-gradient-to-t from-black/80 to-transparent p-4 pt-10">
+                        <p class="text-white font-semibold text-sm">Destaques da Semana</p>
                     </div>
                 </div>
             </div>
-        </div>
 
-        <div class="card">
-            <h3>Campanhas</h3>
-            <div class="meses-grid">
-                <div class="mes-btn" id="mes-container-jan">
-                    <img id="img-mes-jan" src="https://placehold.co/100x100/555/FFF?text=Jan">
-                    <div class="mes-label">JAN</div>
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-xl">
+                <div class="flex items-center justify-between mb-4">
+                    <h3 class="text-lg font-bold flex items-center gap-2">
+                        <span class="text-yellow-400">🎫</span> Meu Passaporte
+                    </h3>
+                    <span class="text-xs bg-white/20 px-2 py-1 rounded-full text-white/80">4 Peças</span>
                 </div>
-                <div class="mes-btn" id="mes-container-fev">
-                    <img id="img-mes-fev" src="https://placehold.co/100x100/555/FFF?text=Fev">
-                    <div class="mes-label">FEV</div>
+
+                <div class="flex justify-center">
+                    <div class="grid grid-cols-2 grid-rows-2 gap-1 w-64 h-64 p-2 bg-black/20 rounded-2xl border border-white/10 shadow-inner relative">
+                        <div class="relative overflow-hidden rounded-tl-xl bg-red-900/40 group" id="peca-container-1">
+                            <img id="img-peca-1" src="https://placehold.co/150/991b1b/fff?text=1" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div class="relative overflow-hidden rounded-tr-xl bg-yellow-900/40 group" id="peca-container-2">
+                            <img id="img-peca-2" src="https://placehold.co/150/854d0e/fff?text=2" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div class="relative overflow-hidden rounded-bl-xl bg-blue-900/40 group" id="peca-container-3">
+                            <img id="img-peca-3" src="https://placehold.co/150/1e3a8a/fff?text=3" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                        </div>
+                        <div class="relative overflow-hidden rounded-br-xl bg-green-900/40 group" id="peca-container-4">
+                            <img id="img-peca-4" src="https://placehold.co/150/14532d/fff?text=4" class="w-full h-full object-cover opacity-80 group-hover:opacity-100 transition-opacity">
+                        </div>
+                    </div>
                 </div>
-                <div class="mes-btn" id="mes-container-mar">
-                    <img id="img-mes-mar" src="https://placehold.co/100x100/555/FFF?text=Mar">
-                    <div class="mes-label">MAR</div>
-                </div>
-                <div class="mes-btn" id="mes-container-abr">
-                    <img id="img-mes-abr" src="https://placehold.co/100x100/555/FFF?text=Abr">
-                    <div class="mes-label">ABR</div>
-                </div>
-                <div class="mes-btn" id="mes-container-mai">
-                    <img id="img-mes-mai" src="https://placehold.co/100x100/555/FFF?text=Mai">
-                    <div class="mes-label">MAI</div>
-                </div>
-                 <div class="mes-btn" id="mes-container-jun">
-                    <img id="img-mes-jun" src="https://placehold.co/100x100/555/FFF?text=Jun">
-                    <div class="mes-label">JUN</div>
+                <p class="text-center text-xs text-green-200/60 mt-4">Junte as 4 peças para o sorteio de Quinta-feira!</p>
+            </div>
+
+            <div class="bg-white/10 backdrop-blur-xl rounded-3xl p-6 border border-white/20 shadow-xl mb-10">
+                <h3 class="text-lg font-bold mb-4 flex items-center gap-2">
+                    <span class="text-blue-400">📅</span> Campanhas
+                </h3>
+                
+                <div class="grid grid-cols-3 gap-3">
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer hover:border-green-400/50 transition-colors" id="mes-container-jan">
+                        <img id="img-mes-jan" src="https://placehold.co/100/333/fff?text=JAN" class="w-full h-full object-cover opacity-70 group-hover:scale-110 transition-transform duration-500">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">JAN</span>
+                        </div>
+                    </div>
+
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer" id="mes-container-fev">
+                        <img id="img-mes-fev" src="https://placehold.co/100/333/fff?text=FEV" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">FEV</span>
+                        </div>
+                    </div>
+
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer" id="mes-container-mar">
+                        <img id="img-mes-mar" src="https://placehold.co/100/333/fff?text=MAR" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">MAR</span>
+                        </div>
+                    </div>
+
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer" id="mes-container-abr">
+                        <img id="img-mes-abr" src="https://placehold.co/100/333/fff?text=ABR" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">ABR</span>
+                        </div>
+                    </div>
+
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer" id="mes-container-mai">
+                        <img id="img-mes-mai" src="https://placehold.co/100/333/fff?text=MAI" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">MAI</span>
+                        </div>
+                    </div>
+
+                    <div class="relative aspect-square rounded-xl overflow-hidden bg-white/5 border border-white/10 group cursor-pointer" id="mes-container-jun">
+                        <img id="img-mes-jun" src="https://placehold.co/100/333/fff?text=JUN" class="w-full h-full object-cover opacity-70">
+                        <div class="absolute inset-0 flex items-end justify-center pb-2 bg-gradient-to-t from-black/90 to-transparent">
+                            <span class="text-[10px] font-bold tracking-widest text-white/90">JUN</span>
+                        </div>
+                    </div>
                 </div>
             </div>
-        </div>
+
+        </main>
+
+        <footer class="absolute bottom-4 w-full text-center">
+            <button id="btn-login" class="text-xs text-white/30 hover:text-white hover:bg-white/10 px-4 py-2 rounded-full transition-all border border-transparent hover:border-white/20">
+                🔒 Acesso Restrito
+            </button>
+        </footer>
+
     </div>
-
-    <footer>
-        <p>SIPATMA 2026 - Corteva</p>
-        <button id="btn-login">🔒 Área Admin</button>
-    </footer>
 
     <script type="module">
         import { initializeApp } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-app.js";
         import { getAuth, signInWithEmailAndPassword, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-auth.js";
         import { getFirestore, doc, setDoc, onSnapshot } from "https://www.gstatic.com/firebasejs/9.6.1/firebase-firestore.js";
 
-        // CHAVES DO DANILO (Configuração Pronta)
+        // CONFIGURAÇÃO (Não mexer)
         const firebaseConfig = {
             apiKey: "AIzaSyB03IGZPXGwgmgKp9MOMRWCFxJqm-hkbzc",
             authDomain: "sipatma-2026.firebaseapp.com",
@@ -259,93 +190,90 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
 
-        // --- SISTEMA DE LOGIN E EDIÇÃO ---
+        // --- SISTEMA ---
         const btnLogin = document.getElementById('btn-login');
-        
-        // 1. Botão Login
+
+        // 1. Login
         btnLogin.addEventListener('click', () => {
-            const email = prompt("📧 Email do Admin:");
+            const email = prompt("📧 Email Admin:");
             const senha = prompt("🔑 Senha:");
             if(email && senha) {
                 signInWithEmailAndPassword(auth, email, senha)
-                .then(() => alert("✅ Login com Sucesso! Toque nos lápis amarelos para editar."))
-                .catch((error) => alert("Erro: " + error.message));
+                .then(() => alert("✅ Modo Admin Ativado!"))
+                .catch((e) => alert("Erro: " + e.message));
             }
         });
 
-        // 2. Se logado, mostra lápis
+        // 2. Monitorar Auth
         onAuthStateChanged(auth, (user) => {
             if (user) {
-                btnLogin.innerText = "🔓 Logado";
-                ativarAdmin();
+                btnLogin.innerText = "🔓 Admin Logado";
+                btnLogin.classList.add("text-green-400", "font-bold");
+                ativarBotoesEdit();
             }
         });
 
-        function ativarAdmin() {
-            // Cria botões onde for necessário
-            criarBotao('main-carousel', 'carousel_main');
-            
-            // Puzzle
-            criarBotao('peca-container-1', 'peca_1');
-            criarBotao('peca-container-2', 'peca_2');
-            criarBotao('peca-container-3', 'peca_3');
-            criarBotao('peca-container-4', 'peca_4');
+        // 3. Criar botões de editar bonitos
+        function ativarBotoesEdit() {
+            const locais = [
+                ['card-carousel', 'carousel_main'],
+                ['peca-container-1', 'peca_1'], ['peca-container-2', 'peca_2'],
+                ['peca-container-3', 'peca_3'], ['peca-container-4', 'peca_4'],
+                ['mes-container-jan', 'mes_jan'], ['mes-container-fev', 'mes_fev'],
+                ['mes-container-mar', 'mes_mar'], ['mes-container-abr', 'mes_abr'],
+                ['mes-container-mai', 'mes_mai'], ['mes-container-jun', 'mes_jun']
+            ];
 
-            // Meses
-            criarBotao('mes-container-jan', 'mes_jan');
-            criarBotao('mes-container-fev', 'mes_fev');
-            criarBotao('mes-container-mar', 'mes_mar');
-            criarBotao('mes-container-abr', 'mes_abr');
-            criarBotao('mes-container-mai', 'mes_mai');
-            criarBotao('mes-container-jun', 'mes_jun');
+            locais.forEach(([divId, dbField]) => {
+                const parent = document.getElementById(divId);
+                if(parent && !parent.querySelector('.btn-edit-float')) {
+                    const btn = document.createElement('button');
+                    // Estilo do botão de editar (Lápis Flutuante)
+                    btn.className = 'btn-edit-float absolute top-2 right-2 bg-yellow-400 hover:bg-yellow-300 text-black w-8 h-8 rounded-full flex items-center justify-center shadow-lg font-bold z-50 transition-transform hover:scale-110 border-2 border-white';
+                    btn.innerHTML = '✎';
+                    btn.title = 'Colar Link';
+                    
+                    btn.onclick = (e) => {
+                        e.stopPropagation();
+                        const link = prompt("Cole o Link Direto da Imagem (ImgBB/Sharepoint):");
+                        if(link) salvarNoBanco(dbField, link);
+                    };
+                    parent.appendChild(btn);
+                    // Garante que o pai seja relativo para o botão posicionar certo
+                    parent.classList.add('relative');
+                }
+            });
         }
 
-        function criarBotao(parentId, dbField) {
-            const parent = document.getElementById(parentId);
-            if(!parent) return;
-            if(parent.querySelector('.btn-edit')) return; // Já existe
-
-            const btn = document.createElement('button');
-            btn.className = 'btn-edit';
-            btn.innerHTML = '✎';
-            
-            btn.onclick = (e) => {
-                e.stopPropagation();
-                const link = prompt("Cole o Link Direto da Imagem (ImgBB/Sharepoint):");
-                if(link) salvar(dbField, link);
-            };
-            parent.appendChild(btn);
-        }
-
-        // 3. Salvar no Banco
-        async function salvar(campo, valor) {
+        // 4. Salvar
+        async function salvarNoBanco(campo, url) {
             try {
                 const ref = doc(db, "site_content", "dados_gerais");
-                await setDoc(ref, { [campo]: valor }, { merge: true });
-                alert("Imagem Atualizada! 🚀");
-            } catch (e) {
-                alert("Erro ao salvar: " + e.message);
-            }
+                await setDoc(ref, { [campo]: url }, { merge: true });
+                alert("Salvo com sucesso!");
+            } catch (e) { alert("Erro: " + e.message); }
         }
 
-        // 4. Carregar Dados (Tempo Real)
+        // 5. Carregar em Tempo Real
         const ref = doc(db, "site_content", "dados_gerais");
         onSnapshot(ref, (snap) => {
             if (snap.exists()) {
                 const d = snap.data();
-                if(d.carousel_main) document.getElementById('img-carousel-1').src = d.carousel_main;
                 
-                if(d.peca_1) document.getElementById('img-peca-1').src = d.peca_1;
-                if(d.peca_2) document.getElementById('img-peca-2').src = d.peca_2;
-                if(d.peca_3) document.getElementById('img-peca-3').src = d.peca_3;
-                if(d.peca_4) document.getElementById('img-peca-4').src = d.peca_4;
+                // Função helper para atualizar imagem
+                const setImg = (id, src) => {
+                    const el = document.getElementById(id);
+                    if(el && src) el.src = src;
+                };
 
-                if(d.mes_jan) document.getElementById('img-mes-jan').src = d.mes_jan;
-                if(d.mes_fev) document.getElementById('img-mes-fev').src = d.mes_fev;
-                if(d.mes_mar) document.getElementById('img-mes-mar').src = d.mes_mar;
-                if(d.mes_abr) document.getElementById('img-mes-abr').src = d.mes_abr;
-                if(d.mes_mai) document.getElementById('img-mes-mai').src = d.mes_mai;
-                if(d.mes_jun) document.getElementById('img-mes-jun').src = d.mes_jun;
+                setImg('img-carousel-1', d.carousel_main);
+                
+                setImg('img-peca-1', d.peca_1); setImg('img-peca-2', d.peca_2);
+                setImg('img-peca-3', d.peca_3); setImg('img-peca-4', d.peca_4);
+
+                setImg('img-mes-jan', d.mes_jan); setImg('img-mes-fev', d.mes_fev);
+                setImg('img-mes-mar', d.mes_mar); setImg('img-mes-abr', d.mes_abr);
+                setImg('img-mes-mai', d.mes_mai); setImg('img-mes-jun', d.mes_jun);
             }
         });
     </script>
